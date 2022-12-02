@@ -3,8 +3,25 @@ import { AuthenticationResponse, RefreshTokenResponse, RegisterResponse } from "
 
 export const authenticationService = {
     authenticate,
-    register
+    register,
+    getAuthToken,
+    logout,
+    get isLoggedIn(): boolean { return localStorage.getItem("accessToken") !== null; }
 };
+
+function logout() {
+    console.log(getAuthToken());
+    localStorage.removeItem("accessToken");
+    console.log(getAuthToken());
+}
+
+function getAuthToken() {
+    return localStorage.getItem("accessToken")?.toString();
+}
+
+function setAuthToken(token: string) {
+    localStorage.setItem("accessToken", token);
+}
 
 async function authenticate(request: AuthenticationRequest): Promise<boolean> {
     const options = {
@@ -18,24 +35,24 @@ async function authenticate(request: AuthenticationRequest): Promise<boolean> {
 
     const url = "http://127.0.0.1:8000/auth/token/";
 
-    const response = await fetch(url, options);
-    const body: any = response.json();
-    const authenticationResponse = body as AuthenticationResponse;
-    const isSuccess = response.ok;
+    return await fetch(url, options)
+        .then(async response => {
+            const body: any = await response.json();
+            const authenticationResponse = body as AuthenticationResponse;
 
-    console.log(url);
-    
+            console.log(authenticationResponse);
 
-    if (isSuccess) {
-        const accessToken: string = authenticationResponse.access;
-        console.log(accessToken);
-        // set access token to observable
+            if (response.ok) {
+                setAuthToken(authenticationResponse.access);
+                // TODO: set refresh token
 
-        const refreshToken: string = authenticationResponse.refresh;
-        localStorage.setItem("refreshToken", refreshToken);
-    }
+            }
 
-    return isSuccess;
+            return response.ok;
+        })
+        .catch(error => {
+            return false;
+        });
 }
 
 async function refreshToken(request: RefreshTokenRequest): Promise<boolean> {
@@ -50,16 +67,19 @@ async function refreshToken(request: RefreshTokenRequest): Promise<boolean> {
 
     const url = "http://127.0.0.1:8000/auth/refresh";
 
-    const response = await fetch(url, options);
-    const body: any = response.json();
-    const refreshTokenResponse = body as RefreshTokenResponse;
-    const isSuccess = response.ok;
-
-    console.log(refreshTokenResponse.access);
-
-    return isSuccess; 
-
-    
+    return await fetch(url, options)
+        .then(async response => {
+            const body: any = await response.json();
+            const refreshTokenResponse = body as RefreshTokenResponse;
+            
+            setAuthToken(refreshTokenResponse.access);
+            console.log(refreshTokenResponse.access);
+            
+            return response.ok;
+        })
+        .catch(error => {
+            return false;
+        });
 }
 
 async function register(request: RegisterRequest): Promise<RegisterResponse> {
@@ -72,10 +92,19 @@ async function register(request: RegisterRequest): Promise<RegisterResponse> {
         body: JSON.stringify(request)
     };
 
-    const url = "http://127.0.0.1:8000/auth/register";
+    const url = "http://127.0.0.1:8000/auth/register/";
 
-    const response = await fetch(url, options);
-    const body: any = response.json();
-
-    return new RegisterResponse(response.status, response.ok, body["message"]);
+    return await fetch(url, options)
+        .then(async response => {
+            const body: any = await response.json();
+            
+            console.log(response.status);
+            console.log(response.ok);
+            console.log(body);
+            
+            return new RegisterResponse(response.status, response.ok, body["message"]);
+        })
+        .catch(error => {
+            return new RegisterResponse(400, false, "There was an error");
+        });
 }
