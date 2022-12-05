@@ -9,6 +9,8 @@ import { authenticationService } from './services/authentication.service';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Home } from './components/Home';
 import { Products } from './components/groceries/Products';
+import { Box } from '@mui/material';
+import { TopBar } from './components/TopBar';
 
 function App() {
 
@@ -19,6 +21,7 @@ function App() {
 
     return (
         <BrowserRouter>
+            <TopBar/>
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -38,6 +41,7 @@ function App() {
                 />
             </Routes>
         </BrowserRouter>
+        
     );
 }
 
