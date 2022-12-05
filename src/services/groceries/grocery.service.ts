@@ -1,4 +1,5 @@
 import { Category } from "../../models/Category";
+import { Product } from "../../models/Product";
 import { ProductRequest } from "../../requests/groceries.requests";
 import { AddProductResponse, DetailProductResponse, RemoveProductResponse } from "../../responses/groceries.responses";
 import { authenticationService } from "../authentication.service";
@@ -11,7 +12,7 @@ export const groceryService = {
     removeByIdAsync,
 };
 
-const baseUrl = "http://127.0.0.1:8000/products/";
+const baseUrl = "http://127.0.0.1:8000/groceries/";
 
 
 async function addAsync(request: ProductRequest): Promise<AddProductResponse | null> {
@@ -63,7 +64,7 @@ async function getByIdAsync(id: number): Promise<DetailProductResponse | null> {
         });
 }
 
-async function getAllAsync(): Promise<Array<DetailProductResponse>> {
+async function getAllAsync(): Promise<Array<Product>> {
     const options = {
         method: "GET",
         headers:  {
@@ -73,13 +74,15 @@ async function getAllAsync(): Promise<Array<DetailProductResponse>> {
         }
     };
 
-    return await fetch(baseUrl, options)
+    const url = baseUrl + "products/"
+
+    return await fetch(url, options)
         .then(async response => {
             if (!response.ok)
                 return [];
 
             const body = await response.json();
-            return body as Array<DetailProductResponse>;
+            return body as Array<Product>;
         })
         .catch(error => {
             return [];

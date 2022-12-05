@@ -8,12 +8,14 @@ import { BrowserRouter, Router, Routes } from 'react-router-dom';
 import { authenticationService } from './services/authentication.service';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Home } from './components/Home';
+import { Products } from './components/groceries/Products';
 
 function App() {
 
-    // useEffect(() => {
-    //     console.log(authenticationService.getAuthToken());
-    // }, []);
+    useEffect(() => {
+        if (!authenticationService.isLoggedIn)
+            authenticationService.logout();
+    }, []);
 
     return (
         <BrowserRouter>
@@ -24,6 +26,13 @@ function App() {
                     element={
                         <PrivateRoute>
                             <Home />
+                        </PrivateRoute>
+                    }
+                />
+                <Route path="/products" 
+                    element={
+                        <PrivateRoute>
+                            <Products />
                         </PrivateRoute>
                     }
                 />
