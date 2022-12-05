@@ -6,7 +6,8 @@ export const authenticationService = {
     register,
     getAuthToken,
     logout,
-    get isLoggedIn(): boolean { return localStorage.getItem("accessToken") !== null; }
+    get isLoggedIn(): boolean { return localStorage.getItem("accessToken") !== null; },
+    getAuthHeader(): string { return `Bearer ${getAuthToken()}`; }
 };
 
 function logout() {
@@ -22,6 +23,10 @@ function getAuthToken() {
 function setAuthToken(token: string) {
     localStorage.setItem("accessToken", token);
 }
+
+// function getAuthHeader() {
+//     return `Bearer ${getAuthToken()}`;
+// }
 
 async function authenticate(request: AuthenticationRequest): Promise<boolean> {
     const options = {
