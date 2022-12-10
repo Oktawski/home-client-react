@@ -77,6 +77,9 @@ async function getAllAsync(): Promise<Array<Product>> {
 
     return await fetch(url, options)
         .then(async response => {
+            if (response.status == 401)
+                authenticationService.logout();
+
             if (!response.ok)
                 return [];
 

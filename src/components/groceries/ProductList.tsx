@@ -15,14 +15,14 @@ export function ProductList() {
 
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 70, flex: 1 },
-        { field: 'name', headerName: 'Name', width: 130, flex: 1 },
-        { field: 'category', headerName: 'Category', width: 130, flex: 1 },
+        { field: 'id', headerName: 'ID', flex: 1 },
+        { field: 'name', headerName: 'Name', flex: 2 },
+        { field: 'category', headerName: 'Category', flex: 1 },
         {
             field: 'quantity',
             headerName: 'Quantity',
-            type: 'number',
-            width: 90,
+            flex: 1,
+            align: 'center'
         }
     ];
 
