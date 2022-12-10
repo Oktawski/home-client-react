@@ -8,9 +8,9 @@ import { BrowserRouter, Router, Routes } from 'react-router-dom';
 import { authenticationService } from './services/authentication.service';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Home } from './components/Home';
-import { Products } from './components/groceries/Products';
 import { Box } from '@mui/material';
 import { TopBar } from './components/TopBar';
+import { Products } from './components/groceries/Products';
 
 function App() {
 

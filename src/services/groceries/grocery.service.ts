@@ -1,5 +1,4 @@
-import { Category } from "../../models/Category";
-import { Product } from "../../models/Product";
+import { Product } from "../../models/Groceries";
 import { ProductRequest } from "../../requests/groceries.requests";
 import { AddProductResponse, DetailProductResponse, RemoveProductResponse } from "../../responses/groceries.responses";
 import { authenticationService } from "../authentication.service";

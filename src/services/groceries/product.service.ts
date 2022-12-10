@@ -1,4 +1,4 @@
-import { Category } from "../../models/Category";
+import { Category } from "../../models/Groceries";
 import { authenticationService } from "../authentication.service";
 
 export const categoryService = {

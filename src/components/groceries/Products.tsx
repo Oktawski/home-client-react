@@ -1,41 +1,28 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid"
-import { useEffect, useState } from "react"
-import { Product } from "../../models/Product"
-import { DetailProductResponse } from "../../responses/groceries.responses"
-import { groceryService } from "../../services/groceries/grocery.service"
+import { Box, Grid } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Category } from "../../models/Groceries";
+import { categoryService } from "../../services/groceries/product.service";
+import { AddProduct } from "./AddProduct";
+import { ProductList } from "./ProductList";
 
 export function Products() {
-    const [products, setProducts] = useState(Array<Product>)
+    const [categories, setCategories] = useState(new Array<Category>());
 
     useEffect(() => {
         (async () => {
-            const response = await groceryService.getAllAsync();
-            setProducts(response);
+            const categoriesResponse = await categoryService.getAllAsync();
+            setCategories(categoriesResponse);
         })();
-    }, []);
-
-
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 70, flex: 1 },
-        { field: 'name', headerName: 'Name', width: 130, flex: 1 },
-        { field: 'category', headerName: 'Category', width: 130, flex: 1 },
-        {
-            field: 'quantity',
-            headerName: 'Quantity',
-            type: 'number',
-            width: 90,
-        }
-    ];
+    }, [])
 
     return (
-        <div style={{ height: 700, width: '100%' }}>
-            <div style={{ display: 'flex', height: '100%' }}>
-                <DataGrid 
-                    columns={columns} 
-                    rows={products}
-                />
-            </div>
-        </div>
-    );
+        <Grid container direction='column' spacing={2} display='flex' paddingX={4}>
+            <Grid item marginTop={2}>
+                <AddProduct categories={ categories } />
+            </Grid>
+            <Grid item>
+                <ProductList />
+            </Grid>
+        </Grid>
+    )
 }
