@@ -32,7 +32,7 @@ export function Login() {
     }
 
     return (
-        <Box sx={{ height: '100vh', alignContent: "center" }}>
+        <Box sx={{ alignContent: "center" }}>
             <Typography variant="h3" sx={{ textAlign: "center", paddingTop: 4 }}>Login</Typography>
 
 
