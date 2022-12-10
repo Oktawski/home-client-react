@@ -1,8 +1,13 @@
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
+import { LoginControl } from "./authentication/LoginControl";
+
+interface TopBarProps {
+    isLoggedIn: boolean
+}
 
 
-export function TopBar() {
+export function TopBar(props: TopBarProps) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -19,12 +24,7 @@ export function TopBar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link style={{ textDecoration: 'none', color: 'white'}} to="/">Home</Link>
                     </Typography>
-                    <Button>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to="/login">Login</Link>
-                    </Button>
-                    <Button>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to="/register">Register</Link>
-                    </Button>
+                    <LoginControl isLoggedIn={props.isLoggedIn} />
                 </Toolbar>
             </AppBar>
         </Box>

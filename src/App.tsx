@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Route } from 'react-router';
@@ -14,14 +14,17 @@ import { Products } from './components/groceries/Products';
 
 function App() {
 
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
     useEffect(() => {
-        if (!authenticationService.isLoggedIn)
-            authenticationService.logout();
+        authenticationService.isLoggedInObservable.subscribe(value => {
+            setIsLoggedIn(value);
+        });
     }, []);
 
     return (
         <BrowserRouter>
-            <TopBar/>
+            <TopBar isLoggedIn={ isLoggedIn } />
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

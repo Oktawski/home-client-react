@@ -1,19 +1,25 @@
+import { BehaviorSubject } from "rxjs";
 import { AuthenticationRequest, RefreshTokenRequest, RegisterRequest } from "../requests/authentication.requests";
 import { AuthenticationResponse, RefreshTokenResponse, RegisterResponse } from "../responses/authentication.responses";
+
+const isLoggedInSubject = new BehaviorSubject(getAuthToken !== null);
 
 export const authenticationService = {
     authenticate,
     register,
     getAuthToken,
     logout,
-    get isLoggedIn(): boolean { return localStorage.getItem("accessToken") !== null; },
-    getAuthHeader(): string { return `Bearer ${getAuthToken()}`; }
+    getAuthHeader(): string { return `Bearer ${getAuthToken()}`; },
+    get isLoggedIn(): boolean { return isLoggedInSubject.value; },
+    isLoggedInObservable: isLoggedInSubject.asObservable()
 };
 
 function logout() {
     console.log(getAuthToken());
     localStorage.removeItem("accessToken");
     console.log(getAuthToken());
+    
+    isLoggedInSubject.next(false);
 }
 
 function getAuthToken() {
@@ -24,9 +30,6 @@ function setAuthToken(token: string) {
     localStorage.setItem("accessToken", token);
 }
 
-// function getAuthHeader() {
-//     return `Bearer ${getAuthToken()}`;
-// }
 
 async function authenticate(request: AuthenticationRequest): Promise<boolean> {
     const options = {
@@ -49,6 +52,7 @@ async function authenticate(request: AuthenticationRequest): Promise<boolean> {
 
             if (response.ok) {
                 setAuthToken(authenticationResponse.access);
+                isLoggedInSubject.next(true);
                 // TODO: set refresh token
 
             }
