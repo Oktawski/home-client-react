@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Category } from "../../models/Groceries";
-import { categoryService } from "../../services/groceries/product.service";
+import { categoryService } from "../../services/groceries/category.service";
 import { AddProduct } from "./AddProduct";
 import { ProductList } from "./ProductList";
 

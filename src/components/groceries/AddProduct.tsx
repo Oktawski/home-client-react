@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Category } from "../../models/Groceries";
 import { ProductRequest } from "../../requests/groceries.requests";
 import { groceryService } from "../../services/groceries/grocery.service";
-import { categoryService } from "../../services/groceries/product.service";
 
 const categoriesMock = [
     "Vegetable",
@@ -16,38 +15,65 @@ interface AddProductProps {
     categories: Array<Category>
 }
 
+function sleep(ms: number) {
+    return new Promise(r => setTimeout(r, ms));
+}
+
 export function AddProduct(props: AddProductProps) {
     const [loading, setLoading] = useState(false);
+    const [product, setProduct] = useState<ProductRequest>({
+        id: null,
+        name: "",
+        category: "",
+        quantity: 0 
+    });
     const categories: Array<Category> = props.categories ?? new Array<Category>();
 
-    const name = useRef("");
-    const category = useRef("");
-    const quantity = useRef(0);
+    const handleChange = (e: any) => {
+        setProduct({...product, [e.target.name]: e.target.value });
+    }
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
         setLoading(true);
 
-        const request = new ProductRequest(
-            null,
-            name.current,
-            category.current,
-            quantity.current
-        );
+        console.log(product);
+        
 
-        const response = await groceryService.addAsync(request);
+        await sleep(2000); 
 
         setLoading(false);
     }
 
     return (
         <Grid container alignItems="center" justifyContent="center" spacing={1} component="form" onSubmit={handleSubmit}>
+
             <Grid item xs={10} sm={3}>
-                <TextField fullWidth label="Name" variant="outlined" size="small"/>
+                <TextField 
+                    required  
+                    name="name"
+                    fullWidth 
+                    label="Name" 
+                    variant="outlined" 
+                    size="small"
+                    disabled={loading}
+                    onChange={handleChange} />
             </Grid>
+
             <Grid item xs={10} sm={3}>
-                <TextField fullWidth select label="Category" variant="outlined" size="small" >
+                <TextField 
+                    required 
+                    name="category"
+                    select 
+                    fullWidth 
+                    label="Category" 
+                    variant="outlined" 
+                    size="small" 
+                    disabled={loading}
+                    onChange={handleChange}
+                    value={product.category}
+                >
                     {categoriesMock.map(option => (
                         <MenuItem key={option} value={option}>
                             {option}
@@ -55,8 +81,19 @@ export function AddProduct(props: AddProductProps) {
                     ))}
                 </TextField>
             </Grid>
+
             <Grid item xs={10} sm={3}>
-                <TextField fullWidth label="Quantity" type="number" variant="outlined" size="small" />
+                <TextField 
+                    required 
+                    name="quantity"
+                    fullWidth 
+                    label="Quantity" 
+                    type="number" 
+                    variant="outlined" 
+                    size="small"
+                    disabled={loading}
+                    onChange={handleChange} 
+                    />
             </Grid>
 
             <Grid item xs={10} sm={'auto'} alignContent="center">
