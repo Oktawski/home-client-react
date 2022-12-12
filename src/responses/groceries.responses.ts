@@ -10,5 +10,5 @@ export interface DetailProductResponse {
 }
 
 export interface RemoveProductResponse {
-
+    message: string
 }

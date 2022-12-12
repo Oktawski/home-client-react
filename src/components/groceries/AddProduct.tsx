@@ -3,7 +3,8 @@ import { FormControl, Grid, MenuItem, TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Category } from "../../models/Groceries";
 import { ProductRequest } from "../../requests/groceries.requests";
-import { groceryService } from "../../services/groceries/grocery.service";
+import { AddProductResponse } from "../../responses/groceries.responses";
+import { productService } from "../../services/groceries/grocery.service";
 
 const categoriesMock = [
     "Vegetable",
@@ -12,11 +13,8 @@ const categoriesMock = [
 ];
 
 interface AddProductProps {
-    categories: Array<Category>
-}
-
-function sleep(ms: number) {
-    return new Promise(r => setTimeout(r, ms));
+    categories: Array<Category>,
+    fetchProducts: Function
 }
 
 export function AddProduct(props: AddProductProps) {
@@ -25,8 +23,9 @@ export function AddProduct(props: AddProductProps) {
         id: null,
         name: "",
         category: "",
-        quantity: 0 
+        quantity: 0
     });
+
     const categories: Array<Category> = props.categories ?? new Array<Category>();
 
     const handleChange = (e: any) => {
@@ -38,12 +37,19 @@ export function AddProduct(props: AddProductProps) {
 
         setLoading(true);
 
-        console.log(product);
-        
+        const response = await productService.addAsync(product);
+        props.fetchProducts();
 
-        await sleep(2000); 
+        if (response?.status == 201)
+            clearForm()
+
+        console.log(response);
 
         setLoading(false);
+    }
+
+    const clearForm = () => {
+        setProduct(new ProductRequest(null, "", "", 0));
     }
 
     return (
@@ -57,6 +63,7 @@ export function AddProduct(props: AddProductProps) {
                     label="Name" 
                     variant="outlined" 
                     size="small"
+                    value={product.name}
                     disabled={loading}
                     onChange={handleChange} />
             </Grid>
@@ -70,9 +77,9 @@ export function AddProduct(props: AddProductProps) {
                     label="Category" 
                     variant="outlined" 
                     size="small" 
+                    value={product.category}
                     disabled={loading}
                     onChange={handleChange}
-                    value={product.category}
                 >
                     {categoriesMock.map(option => (
                         <MenuItem key={option} value={option}>
@@ -91,8 +98,10 @@ export function AddProduct(props: AddProductProps) {
                     type="number" 
                     variant="outlined" 
                     size="small"
+                    value={product.quantity}
                     disabled={loading}
                     onChange={handleChange} 
+                    InputProps={{ inputProps: { min: 0 }}}
                     />
             </Grid>
 

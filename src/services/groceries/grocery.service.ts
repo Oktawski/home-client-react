@@ -1,9 +1,11 @@
+import { redirect } from "react-router-dom";
+import { AddProduct } from "../../components/groceries/AddProduct";
 import { Product } from "../../models/Groceries";
 import { ProductRequest } from "../../requests/groceries.requests";
 import { AddProductResponse, DetailProductResponse, RemoveProductResponse } from "../../responses/groceries.responses";
 import { authenticationService } from "../authentication.service";
 
-export const groceryService = {
+export const productService = {
     addAsync,
     getByIdAsync,
     getAllAsync,
@@ -25,13 +27,21 @@ async function addAsync(request: ProductRequest): Promise<AddProductResponse | n
         body: JSON.stringify(request)
     };
 
-    return await fetch(baseUrl, options)
+    const url = baseUrl + "products/";
+
+    return await fetch(url, options)
         .then(async response => {
             if (!response.ok)
                 return null;
 
             const body = await response.json();
-            return body as AddProductResponse;
+            const product = body as Product;
+
+            return <AddProductResponse> {
+                product: product,
+                status: response.status
+            };
+
         })
         .catch(error => {
             return null;
@@ -77,8 +87,10 @@ async function getAllAsync(): Promise<Array<Product>> {
 
     return await fetch(url, options)
         .then(async response => {
-            if (response.status == 401)
+            if (response.status == 401) {
                 authenticationService.logout();
+                redirect("/");
+            }
 
             if (!response.ok)
                 return [];
@@ -107,15 +119,19 @@ async function removeByIdAsync(id: number): Promise<RemoveProductResponse | null
 
     const url = baseUrl + id;
 
-    return await fetch(url, options)
-        .then(async response => {
-            if (!response.ok)
-                return null;
+    return <RemoveProductResponse> {
+        message: "Removed " + id
+    };
 
-            const body = await response.json();
-            return body as DetailProductResponse;
-        })
-        .catch(error => {
-            return null;
-        });
+    // return await fetch(url, options)
+    //     .then(async response => {
+    //         if (!response.ok)
+    //             return null;
+
+    //         const body = await response.json();
+    //         return body as DetailProductResponse;
+    //     })
+    //     .catch(error => {
+    //         return null;
+    //     });
 }
