@@ -2,7 +2,8 @@ import { BehaviorSubject } from "rxjs";
 import { AuthenticationRequest, RefreshTokenRequest, RegisterRequest } from "../requests/authentication.requests";
 import { AuthenticationResponse, RefreshTokenResponse, RegisterResponse } from "../responses/authentication.responses";
 
-const isLoggedInSubject = new BehaviorSubject(getAuthToken !== null);
+const accessTokenSubject = new BehaviorSubject(getAuthToken());
+const isLoggedInSubject = new BehaviorSubject(accessTokenSubject.value !== null);
 
 export const authenticationService = {
     authenticate,
@@ -19,11 +20,12 @@ function logout() {
     localStorage.removeItem("accessToken");
     console.log(getAuthToken());
     
+    accessTokenSubject.next(null);
     isLoggedInSubject.next(false);
 }
 
-function getAuthToken() {
-    return localStorage.getItem("accessToken")?.toString();
+function getAuthToken(): string | null {
+    return localStorage.getItem("accessToken");
 }
 
 function setAuthToken(token: string) {
@@ -52,6 +54,7 @@ async function authenticate(request: AuthenticationRequest): Promise<boolean> {
 
             if (response.ok) {
                 setAuthToken(authenticationResponse.access);
+                accessTokenSubject.next(getAuthToken());
                 isLoggedInSubject.next(true);
                 // TODO: set refresh token
 

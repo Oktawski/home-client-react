@@ -9,7 +9,7 @@ import { authenticationService } from './services/authentication.service';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Home } from './components/Home';
 import { Box } from '@mui/material';
-import { TopBar } from './components/TopBar';
+import { ResponsiveAppBar } from './components/TopBar';
 import { Products } from './components/groceries/Products';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <TopBar isLoggedIn={ isLoggedIn } />
+            <ResponsiveAppBar isLoggedIn={isLoggedIn}/>
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
