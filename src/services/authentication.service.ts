@@ -33,7 +33,7 @@ function setAuthToken(token: string) {
 }
 
 
-async function authenticate(request: AuthenticationRequest): Promise<boolean> {
+async function authenticate(request: AuthenticationRequest): Promise<string> {
     const options = {
         method: "POST",
         headers: {
@@ -50,6 +50,8 @@ async function authenticate(request: AuthenticationRequest): Promise<boolean> {
             const body: any = await response.json();
             const authenticationResponse = body as AuthenticationResponse;
 
+            console.log(body);
+
             console.log(authenticationResponse);
 
             if (response.ok) {
@@ -58,12 +60,13 @@ async function authenticate(request: AuthenticationRequest): Promise<boolean> {
                 isLoggedInSubject.next(true);
                 // TODO: set refresh token
 
+                return "Welcome back";
             }
 
-            return response.ok;
+            return body["detail"];
         })
         .catch(error => {
-            return false;
+            return "There was an error";
         });
 }
 
