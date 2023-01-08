@@ -1,7 +1,6 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Category, Product } from "../../models/Groceries";
-import { ProductRequest } from "../../requests/groceries.requests";
 import { categoryService } from "../../services/groceries/category.service";
 import { productService } from "../../services/groceries/grocery.service";
 import { AddProduct } from "./AddProduct";
@@ -26,7 +25,21 @@ export function Products() {
         setProducts(response);
     };
 
-    
+    const deleteByIdAsync = async (id: number) => {
+        const message = await productService.removeByIdAsync(id);
+
+        fetchProducts();
+
+        console.log(message);
+    };
+
+
+    const productListProps = {
+        products: products,
+        fetchProducts: fetchProducts,
+        deleteByIdAsync: deleteByIdAsync
+    }
+
 
     return (
         <Grid container direction='column' spacing={2} display='flex' paddingX={4}>
@@ -34,7 +47,7 @@ export function Products() {
                 <AddProduct categories={categories} fetchProducts={fetchProducts} />
             </Grid>
             <Grid item>
-                <ProductList products={products} fetchProducts={fetchProducts} />
+                <ProductList {...productListProps} />
             </Grid>
         </Grid>
     )
