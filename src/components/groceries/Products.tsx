@@ -34,17 +34,22 @@ export function Products() {
     };
 
 
+    const addProductProps = {
+        categories: categories,
+        fetchProductsAsync: fetchProducts
+    };
+
     const productListProps = {
         products: products,
         fetchProducts: fetchProducts,
         deleteByIdAsync: deleteByIdAsync
-    }
+    };
 
 
     return (
         <Grid container direction='column' spacing={2} display='flex' paddingX={4}>
             <Grid item marginTop={2}>
-                <AddProduct categories={categories} fetchProducts={fetchProducts} />
+                <AddProduct {...addProductProps} />
             </Grid>
             <Grid item>
                 <ProductList {...productListProps} />

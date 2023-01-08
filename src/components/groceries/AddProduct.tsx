@@ -1,9 +1,8 @@
 import { LoadingButton } from "@mui/lab";
-import { FormControl, Grid, MenuItem, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { Grid, MenuItem, TextField } from "@mui/material";
+import { useState } from "react";
 import { Category } from "../../models/Groceries";
 import { ProductRequest } from "../../requests/groceries.requests";
-import { AddProductResponse } from "../../responses/groceries.responses";
 import { productService } from "../../services/groceries/grocery.service";
 
 const categoriesMock = [
@@ -14,7 +13,7 @@ const categoriesMock = [
 
 interface AddProductProps {
     categories: Array<Category>,
-    fetchProducts: Function
+    fetchProductsAsync: Function
 }
 
 export function AddProduct(props: AddProductProps) {
@@ -26,8 +25,6 @@ export function AddProduct(props: AddProductProps) {
         quantity: 0
     });
 
-    const categories: Array<Category> = props.categories ?? new Array<Category>();
-
     const handleChange = (e: any) => {
         setProduct({...product, [e.target.name]: e.target.value });
     }
@@ -38,7 +35,7 @@ export function AddProduct(props: AddProductProps) {
         setLoading(true);
 
         const response = await productService.addAsync(product);
-        props.fetchProducts();
+        props.fetchProductsAsync();
 
         if (response?.status == 201)
             clearForm()
