@@ -109,17 +109,21 @@ export function ResponsiveAppBar(props: TopBarProps) {
                                 textDecoration: 'none',
                             }}
                         >
-                            LOGO
+                            BUBA 
                         </Typography>
+
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                             {pages.map((page) => (
-                                <Button
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'white', display: 'block' }}
-                                >
-                                    <Link style={{ textDecoration: 'none', color: 'white'}} to={page}>{page}</Link>
-                                </Button>
+                                <Link style={{ textDecoration: 'none', color: 'white'}} to={page}>
+                                    <Button
+                                        key={page}
+                                        onClick={handleCloseNavMenu}
+                                        sx={{ my: 2, color: 'white', display: 'block' }}
+                                    >
+                                        {page}
+                                    </Button>
+                                </Link>
+
                             ))}
                         </Box>
                     </>
