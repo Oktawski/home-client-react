@@ -1,3 +1,5 @@
+import { FontawesomeObject } from "@fortawesome/fontawesome-svg-core"
+
 export type Category = {
     name: string
 }

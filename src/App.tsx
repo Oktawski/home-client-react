@@ -11,6 +11,10 @@ import { Home } from './components/Home';
 import { Box } from '@mui/material';
 import { ResponsiveAppBar } from './components/TopBar';
 import { Products } from './components/groceries/Products';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faLeaf } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faLeaf)
 
 function App() {
 
