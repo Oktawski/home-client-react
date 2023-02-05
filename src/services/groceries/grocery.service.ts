@@ -117,21 +117,18 @@ async function removeByIdAsync(id: number): Promise<RemoveProductResponse | null
         }
     };
 
-    const url = baseUrl + id;
+    const url = `${baseUrl}products/${id}/`;
 
-    return <RemoveProductResponse> {
-        message: "Removed " + id
-    };
+    return await fetch(url, options)
+        .then(async response => {
+            if (!response.ok)
+                return null;
 
-    // return await fetch(url, options)
-    //     .then(async response => {
-    //         if (!response.ok)
-    //             return null;
-
-    //         const body = await response.json();
-    //         return body as DetailProductResponse;
-    //     })
-    //     .catch(error => {
-    //         return null;
-    //     });
+            return <RemoveProductResponse> {
+                message: "Removed " + id
+            };
+        })
+        .catch(error => {
+            return null;
+        });
 }

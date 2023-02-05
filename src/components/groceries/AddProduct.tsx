@@ -5,12 +5,6 @@ import { Category } from "../../models/Groceries";
 import { ProductRequest } from "../../requests/groceries.requests";
 import { productService } from "../../services/groceries/grocery.service";
 
-const categoriesMock = [
-    "Vegetable",
-    "Fruit",
-    "Candy"
-];
-
 interface AddProductProps {
     categories: Array<Category>,
     fetchProductsAsync: Function
@@ -78,9 +72,9 @@ export function AddProduct(props: AddProductProps) {
                     disabled={loading}
                     onChange={handleChange}
                 >
-                    {categoriesMock.map(option => (
-                        <MenuItem key={option} value={option}>
-                            {option}
+                    {props.categories.map(category => (
+                        <MenuItem key={category.name} value={category.name}>
+                            {category.name}
                         </MenuItem>
                     ))}
                 </TextField>
