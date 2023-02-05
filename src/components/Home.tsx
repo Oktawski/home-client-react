@@ -11,7 +11,7 @@ export function Home() {
             <Button 
                 sx={{ marginTop: 4 }}
                 variant="contained"
-                onClick={() => { authenticationService.logout(); window.location.reload(); }}>
+                onClick={() => { authenticationService.logout(); }}>
                 Logout
             </Button>
         </Box>

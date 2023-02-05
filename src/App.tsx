@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Route } from 'react-router';
@@ -8,15 +8,23 @@ import { BrowserRouter, Router, Routes } from 'react-router-dom';
 import { authenticationService } from './services/authentication.service';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Home } from './components/Home';
+import { Box } from '@mui/material';
+import { ResponsiveAppBar } from './components/TopBar';
+import { Products } from './components/groceries/Products';
 
 function App() {
 
-    // useEffect(() => {
-    //     console.log(authenticationService.getAuthToken());
-    // }, []);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    useEffect(() => {
+        authenticationService.isLoggedInObservable.subscribe(value => {
+            setIsLoggedIn(value);
+        });
+    }, []);
 
     return (
         <BrowserRouter>
+            <ResponsiveAppBar isLoggedIn={isLoggedIn}/>
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -27,8 +35,16 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+                <Route path="/products" 
+                    element={
+                        <PrivateRoute>
+                            <Products />
+                        </PrivateRoute>
+                    }
+                />
             </Routes>
         </BrowserRouter>
+        
     );
 }
 

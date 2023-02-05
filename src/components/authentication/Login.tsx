@@ -1,4 +1,4 @@
-import { Button, Box, TextField, Typography, Grid } from "@mui/material";
+import { Button, Box, TextField, Typography, Grid, Snackbar } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useState } from "react";
 import { AuthenticationRequest } from "../../requests/authentication.requests";
@@ -32,9 +32,8 @@ export function Login() {
     }
 
     return (
-        <Box sx={{ height: '100vh', alignContent: "center" }}>
+        <Box sx={{ alignContent: "center" }}>
             <Typography variant="h3" sx={{ textAlign: "center", paddingTop: 4 }}>Login</Typography>
-
 
             <Grid sx={{
                 marginTop: 10,
