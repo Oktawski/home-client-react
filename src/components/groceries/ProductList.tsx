@@ -19,7 +19,6 @@ interface ProductListProps {
 export function ProductList(props: ProductListProps) {
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', flex: 1 },
         { field: 'name', headerName: 'Name', flex: 2 },
         { field: 'category', headerName: 'Category', flex: 1, align: 'center', renderCell: (params) =>
             <FontAwesomeIcon 
